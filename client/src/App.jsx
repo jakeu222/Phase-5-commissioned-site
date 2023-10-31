@@ -3,9 +3,26 @@ import './App.css'
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
 import RootLayout from './layouts/RootLayout'
 import Home from './pages/Home'
+import Login from './pages/Login'
+import SignUp from './pages/SignUp'
+import Profile from './pages/Profile'
+import Listings from './pages/Listings'
+import Financing from './pages/Financing'
 
 function App() {
 
+  const [listingsData, setListingsData] = useState([]);
+
+  useEffect(() => {
+    fetch("/api/listings")
+      .then(res => res.json())
+      .then(data => setListingsData(data))
+  }, []);
+
+  const filteredListings = listingsData.filter(listing => {
+    return listing.description.toLowerCase().includes(searchName.toLowerCase())
+  })
+  console.log(filteredListings);
 
   const router = createBrowserRouter(createRoutesFromElements(
     <Route to="/" element={<RootLayout />}>
@@ -13,7 +30,7 @@ function App() {
       <Route index element={<Login />} />
       <Route index element={<SignUp />} />
       <Route index element={<Profile />} />
-      <Route index element={<Listing />} />
+      <Route index element={<Listings listingsData={filteredListings} />} />
       <Route index element={<Financing />} />
     </Route>
   ))
