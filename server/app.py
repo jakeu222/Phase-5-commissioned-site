@@ -54,7 +54,7 @@ class Users_Route(Resource):
     def post(self):
         data = request.get_json()
         try:
-            print(data.get('first_name'))
+            print(data.get('buyer'))
 
             new_user = User(
                 first_name=request.get_json()['first_name'],
@@ -65,7 +65,7 @@ class Users_Route(Resource):
                 city=request.get_json()['city'],
                 username=request.get_json()['username'],
                 password_hash=request.get_json()['password'],
-                buyer=request.get_json()['buyer']
+                buyer=bool(request.get_json()['buyer'])
             )
         except ValueError as e:
             return {"errors": str(e)}, 400

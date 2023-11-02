@@ -1,5 +1,10 @@
 import React, { useState } from "react";
 function ListingCard({ listing, }) {
+    const [favorite, setFavorite] = useState(false)
+
+    const toggleFavorite = () => {
+        setFavorite(!favorite);
+    }
     return (
         <li className="card">
             <div >

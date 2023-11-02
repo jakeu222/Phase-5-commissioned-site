@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // import './LogIn.css'
-import useUserStore from "../../hooks/userStore";
+import useUserStore from "../hooks/userStore";
 
 function Login() {
     const [username, setUsername] = useState('');

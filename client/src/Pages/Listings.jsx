@@ -1,10 +1,11 @@
 import React from 'react'
 import ListingCard from './ListingCard'
 
-function Listing({ listingsdata }) {
+function Listing({ listingsData }) {
+    console.log(listingsData)
     return (
         <div className='listings'>
-            {listingsdata.map(listing => <ListingCard key={listing.id} listing={listing} />)}
+            {listingsData.map(listing => <ListingCard key={listing.id} listing={listing} />)}
         </div>
     );
 }

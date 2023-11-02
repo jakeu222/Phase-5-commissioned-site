@@ -38,3 +38,15 @@ if __name__ == '__main__':
             
             db.session.add(u)
             db.session.commit()
+        print('finished users')
+        print('starting listings')
+        for _ in range (10):
+            l = Listing(
+                    title = fake.name(),
+                    price = randint(0, 1000000),
+                    location = 'denver',
+                    description = fake.paragraph(nb_sentences=5),
+            )
+            db.session.add(l)
+            db.session.commit()
+    

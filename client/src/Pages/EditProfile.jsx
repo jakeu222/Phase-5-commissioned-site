@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from 'yup';
 // import './SignUp.css'
 
-const Signup = () => {
+const EditProfile = () => {
     const nav = useNavigate();
     const formik = useFormik({
         initialValues: {
@@ -23,14 +23,13 @@ const Signup = () => {
             age: Yup.number().required('Required'),
             city: Yup.string(),
             username: Yup.string().required('Required'),
-            buyer: Yup.boolean().required('Required'),
+            buyer: Yup.number().required('Required'),
             password: Yup.string().required('Required')
                 .min(8, 'Username should be over 7 characters long')
                 .matches(/[a-zA-Z]/, 'Password must contain at least one letter.')
                 .matches(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/, 'Password must contain at least one special character.'),
         }),
         onSubmit: values => {
-            console.log(values)
             // console.log('Form data', values);
 
             const userObject = {
@@ -41,12 +40,12 @@ const Signup = () => {
                 "city": values.city,
                 "username": values.username,
                 "password": values.password,
-                "buyer": values.buyer
+                "buyer": values.password
             }
             console.log(userObject);
 
-            fetch('/api/users', {
-                method: 'POST',
+            fetch(`/api/users/${id}`, {
+                method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -59,21 +58,22 @@ const Signup = () => {
                     return response.json();
                 })
                 .then(data => {
-                    console.log(data)
-                    // nav("/login");
-
+                    console.log(data);
+                    updateUser(data)
                 })
                 .catch(error => {
                     console.log("error", error.message);
                 });
 
         },
-
     });
 
     return (
         <div id='signUp-div'>
-            <form onSubmit={formik.handleSubmit}>
+            <form onSubmit={(e) => {
+                formik.handleSubmit(e);
+                nav("/profile");
+            }}>
                 <div className="input-group">
                     <label>First Name</label>
                     <input
@@ -130,7 +130,7 @@ const Signup = () => {
                         type="buyer"
                         {...formik.getFieldProps('buyer')}
                     />
-                    {formik.touched.buyer && formik.errors.buyer ? (
+                    {formik.touched.last_name && formik.errors.last_name ? (
                         <div className="error">{formik.errors.buyer}</div>
                     ) : null}
                 </div>
@@ -156,10 +156,10 @@ const Signup = () => {
                     ) : null}
                 </div>
 
-                <button type="submit">Signup</button>
+                <button type="submit">Edit</button>
             </form>
         </div>
     );
 };
 
-export default Signup;
+export default EditProfile;

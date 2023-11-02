@@ -70,6 +70,7 @@ class Listing(db.Model, SerializerMixin):
     serialize_rules = ('-user_listing_rel.listing_rel', '-financing_rel.listing_rel')
 
     id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String)
     price = db.Column(db.Integer)
     location = db.Column(db.String)
     description = db.Column(db.String)
