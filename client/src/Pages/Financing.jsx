@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useFormik } from 'formik';
 
 function Financing() {
     const [loanAmount, setLoanAmount] = useState(0);
@@ -6,7 +7,9 @@ function Financing() {
     const [loanTerm, setLoanTerm] = useState(0);
     const [monthlyPayment, setMonthlyPayment] = useState(0);
 
-    const calculateMonthlyPayment = () => {
+    const calculateMonthlyPayment = (e) => {
+        e.preventDefault()
+        console.log(e)
         // Calculate the monthly mortgage payment here using the input values.
         // You can use the formula for calculating monthly payments.
 
@@ -18,10 +21,39 @@ function Financing() {
             (1 - Math.pow(1 + monthlyInterestRate, -numberOfPayments));
 
         setMonthlyPayment(mortgagePayment.toFixed(2));
-    };
+
+        fetch('/api/financing', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(mortgagePayment)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Network response error");
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data)
+                // nav("/financing");
+
+            })
+            .catch(error => {
+                console.log("error", error.message);
+            });
+
+
+
+    }
+
+
+
+
 
     return (
-        <div>
+        <form onSubmit={calculateMonthlyPayment}>
             <h2>Mortgage Calculator</h2>
             <div>
                 <label>
@@ -53,11 +85,11 @@ function Financing() {
                     />
                 </label>
             </div>
-            <button onClick={calculateMonthlyPayment}>Calculate</button>
+            <button type='submit' >Calculate</button>
             <div>
                 <strong>Monthly Payment:</strong> ${monthlyPayment}
             </div>
-        </div>
+        </form>
     );
 }
 
