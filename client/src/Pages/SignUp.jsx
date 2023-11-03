@@ -60,7 +60,7 @@ const Signup = () => {
                 })
                 .then(data => {
                     console.log(data)
-                    // nav("/login");
+                    nav("/login");
 
                 })
                 .catch(error => {

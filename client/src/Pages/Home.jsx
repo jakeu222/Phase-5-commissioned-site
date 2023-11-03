@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 // import '../home/Home.css'
 import { useNavigate } from "react-router-dom";
 
@@ -7,9 +7,12 @@ import useUserStore from "../hooks/userStore";
 function Home() {
     const nav = useNavigate();
     const { user } = useUserStore();
-    if (user != undefined) {
-        nav('/profile')
-    }
+    // useEffect(() => {
+    //     if (user != undefined) {
+    //         nav('/profile')
+    //     }
+    // }, [])
+
     return (
         <div className='Home-container'>
 

@@ -94,11 +94,18 @@ class UserById_Route(Resource):
             dtp = request.get_json()
             errors = []
             for attr in dtp:
-                try:
-                    setattr(user, attr, dtp[attr])
-                except ValueError as e:
-                    errors.append(e.__repr__())
+                if attr == 'buyer':
+                    try:
+                        setattr(user, attr, bool(dtp[attr]))
+                    except ValueError as e:
+                        errors.append(e.__repr__())
+                else:
+                    try:
+                        setattr(user, attr, dtp[attr])
+                    except ValueError as e:
+                        errors.append(e.__repr__())
             if len(errors) != 0:
+                print(errors)
                 return {"errors": errors}, 400
             else:
                 db.session.add(user)

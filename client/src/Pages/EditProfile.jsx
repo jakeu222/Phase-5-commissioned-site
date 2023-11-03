@@ -1,9 +1,11 @@
 import { useFormik } from 'formik';
 import { useNavigate } from "react-router-dom";
 import * as Yup from 'yup';
+import useUserStore from '../hooks/userStore';
 // import './SignUp.css'
 
 const EditProfile = () => {
+    const { user, updateUser, deleteUser } = useUserStore()
     const nav = useNavigate();
     const formik = useFormik({
         initialValues: {
@@ -23,13 +25,14 @@ const EditProfile = () => {
             age: Yup.number().required('Required'),
             city: Yup.string(),
             username: Yup.string().required('Required'),
-            buyer: Yup.number().required('Required'),
+            buyer: Yup.boolean().required('Required'),
             password: Yup.string().required('Required')
                 .min(8, 'Username should be over 7 characters long')
                 .matches(/[a-zA-Z]/, 'Password must contain at least one letter.')
                 .matches(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/, 'Password must contain at least one special character.'),
         }),
         onSubmit: values => {
+            console.log(values)
             // console.log('Form data', values);
 
             const userObject = {
@@ -40,11 +43,11 @@ const EditProfile = () => {
                 "city": values.city,
                 "username": values.username,
                 "password": values.password,
-                "buyer": values.password
+                "buyer": values.buyer
             }
             console.log(userObject);
 
-            fetch(`/api/users/${id}`, {
+            fetch(`/api/users/${user.id}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
@@ -70,10 +73,7 @@ const EditProfile = () => {
 
     return (
         <div id='signUp-div'>
-            <form onSubmit={(e) => {
-                formik.handleSubmit(e);
-                nav("/profile");
-            }}>
+            <form onSubmit={formik.handleSubmit}>
                 <div className="input-group">
                     <label>First Name</label>
                     <input
@@ -130,7 +130,7 @@ const EditProfile = () => {
                         type="buyer"
                         {...formik.getFieldProps('buyer')}
                     />
-                    {formik.touched.last_name && formik.errors.last_name ? (
+                    {formik.touched.buyer && formik.errors.buyer ? (
                         <div className="error">{formik.errors.buyer}</div>
                     ) : null}
                 </div>
@@ -156,10 +156,209 @@ const EditProfile = () => {
                     ) : null}
                 </div>
 
-                <button type="submit">Edit</button>
+                <button type="submit">Edit Account</button>
+                <button className='deleteAccountBtn' onClick={(e) => {
+                    fetch("/api/logout", { method: "DELETE" })
+                        .then((response) => {
+                            if (!response.ok) {
+                                throw new Error("Network response error");
+                            }
+                        })
+                        .then(() => {
+                            fetch(`/api/users/${user.id}`, { method: 'DELETE' })
+                                .then((response) => {
+                                    if (!response.ok) {
+                                        throw new Error("Network response error");
+                                    }
+                                })
+                                .then(() => {
+                                    deleteUser();
+                                    nav("/");
+                                })
+                                .catch((error) => {
+                                    console.log("error", error.message);
+                                })
+                        })
+                        .catch((error) => {
+                            console.log("error", error.message);
+                        });
+                }}>Delete Account</button>
             </form>
         </div>
     );
 };
 
 export default EditProfile;
+
+
+
+
+
+
+
+
+// import { useFormik } from 'formik';
+// import { useNavigate } from "react-router-dom";
+// import * as Yup from 'yup';
+// // import './SignUp.css'
+
+// const EditProfile = () => {
+//     const nav = useNavigate();
+//     const formik = useFormik({
+//         initialValues: {
+//             first_name: '',
+//             last_name: '',
+//             email: '',
+//             age: 0,
+//             city: '',
+//             username: '',
+//             password: '',
+//             buyer: ''
+//         },
+//         validationSchema: Yup.object({
+//             first_name: Yup.string().required('Required'),
+//             last_name: Yup.string().required('Required'),
+//             email: Yup.string().required('Required').email('Invalid email address'),
+//             age: Yup.number().required('Required'),
+//             city: Yup.string(),
+//             username: Yup.string().required('Required'),
+//             buyer: Yup.number().required('Required'),
+//             password: Yup.string().required('Required')
+//                 .min(8, 'Username should be over 7 characters long')
+//                 .matches(/[a-zA-Z]/, 'Password must contain at least one letter.')
+//                 .matches(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/, 'Password must contain at least one special character.'),
+//         }),
+//         onSubmit: values => {
+//             // console.log('Form data', values);
+
+//             const userObject = {
+//                 "first_name": values.first_name,
+//                 "last_name": values.last_name,
+//                 "email": values.email,
+//                 "age": values.age,
+//                 "city": values.city,
+//                 "username": values.username,
+//                 "password": values.password,
+//                 "buyer": values.password
+//             }
+//             console.log(userObject);
+
+//             fetch(`/api/users/${id}`, {
+//                 method: 'PATCH',
+//                 headers: {
+//                     'Content-Type': 'application/json'
+//                 },
+//                 body: JSON.stringify(userObject)
+//             })
+//                 .then(response => {
+//                     if (!response.ok) {
+//                         throw new Error("Network response error");
+//                     }
+//                     return response.json();
+//                 })
+//                 .then(data => {
+//                     console.log(data);
+//                     updateUser(data)
+//                 })
+//                 .catch(error => {
+//                     console.log("error", error.message);
+//                 });
+
+//         },
+//     });
+
+//     return (
+//         <div id='signUp-div'>
+//             <form onSubmit={(e) => {
+//                 formik.handleSubmit(e);
+//                 nav("/profile");
+//             }}>
+//                 <div className="input-group">
+//                     <label>First Name</label>
+//                     <input
+//                         type="first_name"
+//                         {...formik.getFieldProps('first_name')}
+//                     />
+//                     {formik.touched.first_name && formik.errors.first_name ? (
+//                         <div className="error">{formik.errors.first_name}</div>
+//                     ) : null}
+//                 </div>
+//                 <div className="input-group">
+//                     <label>Last Name</label>
+//                     <input
+//                         type="last_name"
+//                         {...formik.getFieldProps('last_name')}
+//                     />
+//                     {formik.touched.last_name && formik.errors.last_name ? (
+//                         <div className="error">{formik.errors.last_name}</div>
+//                     ) : null}
+//                 </div>
+//                 <div className="input-group">
+//                     <label>Email</label>
+//                     <input
+//                         type="email"
+//                         {...formik.getFieldProps('email')}
+//                     />
+//                     {formik.touched.email && formik.errors.email ? (
+//                         <div className="error">{formik.errors.email}</div>
+//                     ) : null}
+//                 </div>
+//                 <div className="input-group">
+//                     <label>Age</label>
+//                     <input
+//                         type="age"
+//                         {...formik.getFieldProps('age')}
+//                     />
+//                     {formik.touched.age && formik.errors.age ? (
+//                         <div className="error">{formik.errors.age}</div>
+//                     ) : null}
+//                 </div>
+//                 <div className="input-group">
+//                     <label>City of Residence</label>
+//                     <input
+//                         type="city"
+//                         {...formik.getFieldProps('city')}
+//                     />
+//                     {formik.touched.city && formik.errors.city ? (
+//                         <div className="error">{formik.errors.city}</div>
+//                     ) : null}
+//                 </div>
+//                 <div className="input-group">
+//                     <label>Buyer</label>
+//                     <input
+//                         type="buyer"
+//                         {...formik.getFieldProps('buyer')}
+//                     />
+//                     {formik.touched.last_name && formik.errors.last_name ? (
+//                         <div className="error">{formik.errors.buyer}</div>
+//                     ) : null}
+//                 </div>
+//                 <div className="input-group">
+//                     <label>Username</label>
+//                     <input
+//                         type="text"
+//                         {...formik.getFieldProps('username')}
+//                     />
+//                     {formik.touched.username && formik.errors.username ? (
+//                         <div className="error">{formik.errors.username}</div>
+//                     ) : null}
+//                 </div>
+
+//                 <div className="input-group">
+//                     <label>Password</label>
+//                     <input
+//                         type="password"
+//                         {...formik.getFieldProps('password')}
+//                     />
+//                     {formik.touched.password && formik.errors.password ? (
+//                         <div className="error">{formik.errors.password}</div>
+//                     ) : null}
+//                 </div>
+
+//                 <button type="submit">Edit</button>
+//             </form>
+//         </div>
+//     );
+// };
+
+// export default EditProfile;
