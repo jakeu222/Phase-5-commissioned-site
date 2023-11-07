@@ -56,7 +56,7 @@ function App() {
       <Route path='/editprofile' element={<EditProfile />} />
       <Route path='/listings' element={<Listings listingsData={filteredListings} />} />
       <Route path='/financing' element={<Financing />} />
-      <Route path='/eventform ' element={<Events />} />
+      <Route path='/eventform' element={<Events />} />
       <Route path='/events' element={<EventContainer eventsData={eventsData} />} />
       <Route path='/editevent/:eventId' element={<EditEvent updateEvents={updateEvents} />} />
       {/* <Route path='/eventscontainer' element={<EventContainer listingsData={filteredEvents} />} /> */}
@@ -75,9 +75,13 @@ function App() {
   }, []);
 
   return (
-    <>
+    <div>
       <RouterProvider router={router} />
-    </>
+
+
+
+    </div>
+
   )
 }
 
