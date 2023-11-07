@@ -37,6 +37,7 @@ function NavBar() {
                             {/* <li><NavLink to="/">Home</NavLink></li> */}
                             <li><NavLink to='/signup'>signup</NavLink></li>
                             <li><NavLink to='/listings'>Listings</NavLink></li>
+                            <li><NavLink to='/Events'>Events</NavLink></li>
                             {/* <li><NavLink to='/' onClick={() => {
                                 fetch("/api/logout", { method: "DELETE" })
                                     .then((response) => {

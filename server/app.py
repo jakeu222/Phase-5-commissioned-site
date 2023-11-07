@@ -381,16 +381,19 @@ class EventById_Route(Resource):
         return {"error": "User not found"}, 404
     
     def delete(self, id):
+        print('inside delete')
         event = Event.query.filter_by(id=id).first()
+        print(event)
         if event:
             try:
                 db.session.delete(event)
                 db.session.commit()
                 return 'User no more', 204
             except Exception:
-                return '', 400
+                return {}, 400
         else:
-            return {"error": "User not found"}, 404
+            return {"error": "Event not found"}, 404
+        
 api.add_resource(EventById_Route, '/events/<int:id>')
 
 # Views go here! use either route!

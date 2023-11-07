@@ -63,6 +63,7 @@ const EditProfile = () => {
                 .then(data => {
                     console.log(data);
                     updateUser(data)
+                    nav("/profile");
                 })
                 .catch(error => {
                     console.log("error", error.message);
