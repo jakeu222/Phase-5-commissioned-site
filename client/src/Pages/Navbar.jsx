@@ -68,6 +68,7 @@ function NavBar() {
                         </li>
                         <li><NavLink to='/listings'>Listings</NavLink></li>
                         <li><NavLink to='/financing'>Financing</NavLink></li>
+                        <li><NavLink to='/Events'>Events</NavLink></li>
                         <li>
                             <NavLink to='/' onClick={() => {
                                 fetch("/api/logout", { method: "DELETE" })
