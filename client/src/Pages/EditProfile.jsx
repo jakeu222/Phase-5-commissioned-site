@@ -71,7 +71,7 @@ const EditProfile = () => {
 
     return (
         <div className="min-h-screen flex justify-center items-center bg-hero bg-cover" style={{ backgroundImage: 'url(https://www.tileclub.com/cdn/shop/files/roman-flower-blue-celeste-marble-mosaic-tile-kitchen-new-colorway.jpg?v=1684529970)' }}>
-            <div className="max-w-md w-full p-4 space-y-4 bg-white rounded-lg shadow-md text-black">
+            <div className="max-w-md w-full p-4 space-y-4 bg-white rounded-lg shadow-md text-white">
                 <form onSubmit={formik.handleSubmit}>
                     <h2 className="text-3xl text-center font-bold mb-4 text-gray-600">Edit Profile</h2>
                     <div className="mb-4">
